@@ -3,6 +3,8 @@ package com.ntsGroup.app.BlogApp.services;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.ntsGroup.app.BlogApp.dto.PostDto;
 import com.ntsGroup.app.BlogApp.exceptions.ResourceNotFoundException;
@@ -25,13 +27,6 @@ public class PostService implements PostInterface {
 		// convert entity to DTO
 		PostDto mappedDto = mapEntityToDto(newPost);
 		return mappedDto;
-	}
-
-	public List<PostDto> getPosts() {
-
-		List<Post> posts = postRepository.findAll();
-		return posts.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
-
 	}
 
 	public PostDto getPostById(long id) {
@@ -78,7 +73,17 @@ public class PostService implements PostInterface {
 	public void deletePost(long id) {
 		Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", "id", id));
 		postRepository.delete(post);
-		
+
+	}
+
+	@Override
+	public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+
+		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+		Page<Post> posts = postRepository.findAll(pageRequest);
+		List<Post> listOfPosts = posts.getContent();
+		return listOfPosts.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
+
 	}
 
 }
