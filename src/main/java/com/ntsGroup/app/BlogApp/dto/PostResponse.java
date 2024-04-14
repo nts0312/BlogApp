@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostResponse {
 
-	private List<PostDto> content;
+	private List<PostDto> postList;
 	private int pageNo;
 	private int pageSize;
 	private long totalElements;

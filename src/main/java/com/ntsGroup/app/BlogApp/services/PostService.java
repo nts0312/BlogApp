@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.ntsGroup.app.BlogApp.dto.PostDto;
+import com.ntsGroup.app.BlogApp.dto.PostResponse;
 import com.ntsGroup.app.BlogApp.exceptions.ResourceNotFoundException;
 import com.ntsGroup.app.BlogApp.interfaces.PostInterface;
 import com.ntsGroup.app.BlogApp.model.Post;
@@ -77,12 +78,24 @@ public class PostService implements PostInterface {
 	}
 
 	@Override
-	public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+	public PostResponse getAllPosts(int pageNo, int pageSize) {
 
 		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
 		Page<Post> posts = postRepository.findAll(pageRequest);
 		List<Post> listOfPosts = posts.getContent();
-		return listOfPosts.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
+		
+		List<PostDto> postsList = listOfPosts.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
+		 
+		 PostResponse postResponse = new PostResponse();
+		 
+		 postResponse.setPostList(postsList);
+		 postResponse.setLast(posts.isLast());
+		 postResponse.setPageSize(pageSize);
+		 postResponse.setPageNo(pageNo);
+		 postResponse.setTotalPage(posts.getTotalPages());
+		 postResponse.setTotalElements(posts.getTotalElements());
+		 
+		 return postResponse;
 
 	}
 

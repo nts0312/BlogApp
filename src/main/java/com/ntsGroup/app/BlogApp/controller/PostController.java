@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ntsGroup.app.BlogApp.dto.PostDto;
+import com.ntsGroup.app.BlogApp.dto.PostResponse;
 import com.ntsGroup.app.BlogApp.services.PostService;
 
 @RestController
@@ -28,7 +29,7 @@ public class PostController {
 	}
 
 	@GetMapping
-	public List<PostDto> getAllPosts(
+	public PostResponse getAllPosts(
 			@RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
 			@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo) {
 
