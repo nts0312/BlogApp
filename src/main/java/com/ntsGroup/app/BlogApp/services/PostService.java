@@ -2,9 +2,12 @@ package com.ntsGroup.app.BlogApp.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.ntsGroup.app.BlogApp.dto.PostDto;
 import com.ntsGroup.app.BlogApp.dto.PostResponse;
@@ -18,6 +21,9 @@ public class PostService implements PostInterface {
 
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private ModelMapper mapper;
 
 	// Methods
 	public PostDto createPost(PostDto postDto) {
@@ -37,21 +43,12 @@ public class PostService implements PostInterface {
 	}
 
 	PostDto mapEntityToDto(Post newPost) {
-
-		PostDto postResponse = new PostDto();
-		postResponse.setId(newPost.getId());
-		postResponse.setContent(newPost.getContent());
-		postResponse.setTitle(newPost.getTitle());
-		postResponse.setDescription(newPost.getDescription());
+		PostDto postResponse = mapper.map(newPost, PostDto.class);
 		return postResponse;
 	}
 
 	Post dtoToMapEntity(PostDto postDto) {
-
-		Post post = new Post();
-		post.setTitle(postDto.getTitle());
-		post.setDescription(postDto.getDescription());
-		post.setContent(postDto.getContent());
+		Post post = mapper.map(postDto, Post.class);
 		return post;
 	}
 
@@ -65,7 +62,6 @@ public class PostService implements PostInterface {
 		post.setDescription(postDto.getDescription());
 
 		Post updatedPost = postRepository.save(post);
-
 		PostDto newPost = mapEntityToDto(updatedPost);
 		return newPost;
 	}
@@ -78,24 +74,27 @@ public class PostService implements PostInterface {
 	}
 
 	@Override
-	public PostResponse getAllPosts(int pageNo, int pageSize) {
+	public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String dir) {
 
-		PageRequest pageRequest = PageRequest.of(pageNo, pageSize);
+		Sort sort = dir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+				: Sort.by(sortBy).descending();
+
+		PageRequest pageRequest = PageRequest.of(pageNo, pageSize, sort);
 		Page<Post> posts = postRepository.findAll(pageRequest);
 		List<Post> listOfPosts = posts.getContent();
-		
+
 		List<PostDto> postsList = listOfPosts.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
-		 
-		 PostResponse postResponse = new PostResponse();
-		 
-		 postResponse.setPostList(postsList);
-		 postResponse.setLast(posts.isLast());
-		 postResponse.setPageSize(pageSize);
-		 postResponse.setPageNo(pageNo);
-		 postResponse.setTotalPage(posts.getTotalPages());
-		 postResponse.setTotalElements(posts.getTotalElements());
-		 
-		 return postResponse;
+
+		PostResponse postResponse = new PostResponse();
+
+		postResponse.setPostList(postsList);
+		postResponse.setLast(posts.isLast());
+		postResponse.setPageSize(pageSize);
+		postResponse.setPageNo(pageNo);
+		postResponse.setTotalPage(posts.getTotalPages());
+		postResponse.setTotalElements(posts.getTotalElements());
+
+		return postResponse;
 
 	}
 
