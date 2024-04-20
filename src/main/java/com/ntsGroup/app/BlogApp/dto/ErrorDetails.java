@@ -1,6 +1,6 @@
 package com.ntsGroup.app.BlogApp.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.Getter;
 

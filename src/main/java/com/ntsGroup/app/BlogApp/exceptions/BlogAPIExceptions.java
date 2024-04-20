@@ -7,7 +7,7 @@ import lombok.Getter;
 public class BlogAPIExceptions extends RuntimeException {
 
 	@Getter
-	private HttpStatus status;
+	private HttpStatus status; 
 	private String message;
 
 	public BlogAPIExceptions(HttpStatus status, String message) {
