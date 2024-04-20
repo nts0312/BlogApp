@@ -44,11 +44,21 @@ public class PostService implements PostInterface {
 
 	PostDto mapEntityToDto(Post newPost) {
 		PostDto postResponse = mapper.map(newPost, PostDto.class);
+		
+//		PostDto postResponse = new PostDto();
+//		postResponse.setId(newPost.getId());
+//		postResponse.setContent(newPost.getContent());
+//		postResponse.setTitle(newPost.getTitle());
+//		postResponse.setDescription(newPost.getDescription());
 		return postResponse;
 	}
 
 	Post dtoToMapEntity(PostDto postDto) {
 		Post post = mapper.map(postDto, Post.class);
+//		Post post = new Post();
+//		post.setTitle(postDto.getTitle());
+//		post.setDescription(postDto.getDescription());
+//		post.setContent(postDto.getContent());
 		return post;
 	}
 
