@@ -15,6 +15,8 @@ import com.ntsGroup.app.BlogApp.dto.PostDto;
 import com.ntsGroup.app.BlogApp.dto.PostResponse;
 import com.ntsGroup.app.BlogApp.services.PostService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
@@ -23,7 +25,7 @@ public class PostController {
 	private PostService postService;
 
 	@PostMapping
-	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
+	public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
 		return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
 	}
 
@@ -44,7 +46,7 @@ public class PostController {
 	}
 
 	@PostMapping("/{id}")
-	public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable(name = "id") long id) {
+	public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable(name = "id") long id) {
 		return new ResponseEntity<>(postService.updatePost(postDto, id), HttpStatus.OK);
 	}
 
