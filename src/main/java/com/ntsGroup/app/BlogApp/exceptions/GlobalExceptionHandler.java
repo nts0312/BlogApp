@@ -62,5 +62,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(errorsMap, HttpStatus.BAD_REQUEST);
 
 	}
-
+//above method can also be done same as the exceptions are handled ---- MethodArgumentNotValidException.class
 }
