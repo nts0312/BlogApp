@@ -19,7 +19,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@Data
+//@Data it is commented because , it creates toString method also which causes comment to call Post and Post to comment classes attributes ;- creates a cycle
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
