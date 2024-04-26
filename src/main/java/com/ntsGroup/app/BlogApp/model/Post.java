@@ -3,12 +3,17 @@ package com.ntsGroup.app.BlogApp.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.ManyToAny;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,14 +37,19 @@ public class Post {
 
 	@Column(name = "title", nullable = false, unique = true)
 	private String title;
-	
+
 	@Column(name = "description", nullable = false)
 	private String description;
-	
+
 	@Column(name = "content", nullable = false)
 	private String content;
-	
+ 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Comment> comments = new HashSet<>();
+
+	@ManyToOne(fetch = FetchType.LAZY)
+
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 }

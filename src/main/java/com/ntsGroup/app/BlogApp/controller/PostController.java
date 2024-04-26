@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ntsGroup.app.BlogApp.dto.PostDto;
 import com.ntsGroup.app.BlogApp.dto.PostResponse;
+import com.ntsGroup.app.BlogApp.interfaces.PostInterface;
 import com.ntsGroup.app.BlogApp.services.PostService;
 
 import jakarta.validation.Valid;
@@ -23,12 +24,12 @@ import jakarta.validation.Valid;
 public class PostController {
 
 	@Autowired
-	private PostService postService;
+	private PostInterface postInterface;
 
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
-		return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
+		return new ResponseEntity<>(postInterface.createPost(postDto), HttpStatus.CREATED);
 	}
 
 	@GetMapping
@@ -38,24 +39,24 @@ public class PostController {
 			@RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
 			@RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
 
-		return postService.getAllPosts(pageNo, pageSize, sortBy, sortDir);
+		return postInterface.getAllPosts(pageNo, pageSize, sortBy, sortDir);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<PostDto> getPostById(@PathVariable(name = "id") long id) {
-		return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
+		return new ResponseEntity<>(postInterface.getPostById(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable(name = "id") long id) {
-		return new ResponseEntity<>(postService.updatePost(postDto, id), HttpStatus.OK);
+		return new ResponseEntity<>(postInterface.updatePost(postDto, id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> deletePost(@PathVariable(name = "id") long id) {
-		postService.deletePost(id);
+		postInterface.deletePost(id);
 		return new ResponseEntity<>("Post entity deleted successfully !", HttpStatus.OK);
 	}
 }
