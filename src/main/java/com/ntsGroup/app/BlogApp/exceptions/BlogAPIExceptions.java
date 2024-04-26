@@ -11,15 +11,15 @@ public class BlogAPIExceptions extends RuntimeException {
 	private String message;
 
 	public BlogAPIExceptions(HttpStatus status, String message) {
-
+		super(message);
 		this.status = status;
 		this.message = message;
 	}
 
-	public BlogAPIExceptions(HttpStatus status, String message, String mess) {
-		super(message);
-		this.status = status;
-		this.message = mess;
-	}
+//	public BlogAPIExceptions(HttpStatus status, String message, String mess) {
+//		super(message);
+//		this.status = status;
+//		this.message = mess;
+//	}
 
 }
