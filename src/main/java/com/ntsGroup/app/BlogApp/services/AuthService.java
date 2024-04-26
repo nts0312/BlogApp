@@ -20,6 +20,7 @@ import com.ntsGroup.app.BlogApp.model.Role;
 import com.ntsGroup.app.BlogApp.model.User;
 import com.ntsGroup.app.BlogApp.repository.RoleRepository;
 import com.ntsGroup.app.BlogApp.repository.UserRepository;
+import com.ntsGroup.app.BlogApp.security.JwtTokenProvider;
 
 @Service
 public class AuthService implements AuthInterface {
@@ -36,12 +37,17 @@ public class AuthService implements AuthInterface {
 	@Autowired
 	private RoleRepository roleRepository;
 
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+	
 	public String login(LoginDto loginDto) {
 		Authentication auth = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(auth);
-		return "User Logged-in successfully";
+		
+		String token = jwtTokenProvider.generateToken(auth);
+		return token;
 	}
 
 	public String register(RegisterDto registerDto) {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ntsGroup.app.BlogApp.dto.JWTAuthResponse;
 import com.ntsGroup.app.BlogApp.dto.LoginDto;
 import com.ntsGroup.app.BlogApp.dto.RegisterDto;
 import com.ntsGroup.app.BlogApp.services.AuthService;
@@ -20,9 +21,12 @@ public class AuthController {
 	private AuthService authService;
 
 	@PostMapping(value = { "/login", "/signin" })
-	public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+	public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDto loginDto) {
 		String response = authService.login(loginDto);
-		return ResponseEntity.ok(response);
+		
+		JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
+		jwtAuthResponse.setAccessToken(response);
+		return ResponseEntity.ok(jwtAuthResponse);
 	}
 
 	@PostMapping(value = { "/register", "/signup" })
